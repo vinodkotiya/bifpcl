@@ -1133,7 +1133,7 @@ Public Class dbOp
             '    Return " Fail Non NTPC mail"
             'End If
             'create the mail message
-            pwd = "Bifpcl&123"
+            pwd = "Bifpccc23"
             Dim mail As New MailMessage()
 
             'set the addresses
@@ -1307,9 +1307,7 @@ Public Class dbOp
 
         'Prepare you post parameters
         Dim sbPostData As New StringBuilder()
-        'sbPostData.AppendFormat("&username={0}", "bifpcl")
-        'sbPostData.AppendFormat("&password={0}", "Imtheone@6")
-        'sbPostData.AppendFormat("&to={0}", mobileNumber)
+       'sbPostData.AppendFormat("&to={0}", mobileNumber)
         'sbPostData.AppendFormat("&text={0}", msg)
 
 
