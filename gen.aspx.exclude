@@ -1,0 +1,321 @@
+﻿<%@ Page Language="VB" AutoEventWireup="false" CodeFile="gen.aspx.vb" Inherits="_gen" %>
+<%@ Register Assembly="AjaxControlToolkit" Namespace="AjaxControlToolkit" TagPrefix="asp" %>
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head runat="server">
+    <meta charset="utf-8" />
+  <title>OS Performance System for JV's</title>
+	<meta name="description" content="NTPC OS Performance System for JV's Data Entry & Reporting Module" />
+	<meta name="keywords" content="OS, Performance, System , JV's, NTPC" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <!--[if (gte IE 9)|!(IE)]>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8">
+  <![endif]--> 
+
+  <!-- Favicon -->
+  <link href="img/favicon.ico" rel="icon" type="image/png" />
+
+  <!-- Styles -->
+  <link href="css/styles1.css" rel="stylesheet" />
+  <link href="css/bootstrap-override.css" rel="stylesheet" />
+
+  <!-- Font Avesome Styles -->
+    <link href="css/font-awesome.min.css" rel="stylesheet" />
+  <%--<link href="css/font-awesome/font-awesome.css" rel="stylesheet" />--%>
+	<!--[if IE 7]>
+		<link href="css/font-awesome/font-awesome-ie7.min.css" rel="stylesheet">
+	<![endif]-->
+
+  <!-- FlexSlider Style -->
+  <link rel="stylesheet" href="css/flexslider.css" type="text/css" media="screen" />
+
+	<!-- Internet Explorer condition - HTML5 shim, for IE6-8 support of HTML5 elements -->
+	<!--[if lt IE 9]>
+		<script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+	<![endif]-->   
+    
+</head>
+<body>
+    <form id="form1" runat="server"  enctype="multipart/form-data" method="post" >
+           <asp:ScriptManager ID="ScriptManager1" runat="server" EnablePartialRendering="true"></asp:ScriptManager>
+     <!-- Header -->
+  <header id="header">
+    <div class="container">
+      <div class="row t-container">
+
+        <!-- Logo -->
+        <div class="span3">
+          <div class="logo">
+            <a href="Default.aspx"><h3>NTPC JV's Operation Performance System</h3></a>
+          </div>            
+        </div>
+
+        <div class="span9">
+          <div class="row space60"></div>
+             <nav id="nav" role="navigation" runat="server">
+               	<%--	<a href="#nav" title="Show navigation">Show navigation</a>
+	            <a href="#" title="Hide navigation">Hide navigation</a>
+	            <ul class="clearfix">
+	           <li class="active"><a href="index.htm" title="">Home</a></li>
+                <li><a href="about-us.htm" title="">Team</a></li>                
+                <li><a href="gallery.htm" title="">Data Entry</a></li>
+                <li><a href="services.htm" title="">Bulk Entry</a></li>
+                <li><a href="components.htm" title=""><span>Reports</span></a>
+  			      <ul> <!-- Submenu -->
+                      <li><a href="components.htm" title="">Generation</a></li>
+                      <li><a href="blog.htm" title="">Operation</a></li>
+                      <li><a href="blog-detail.htm" title="">Outage</a></li>
+                      <li><a href="contact.htm" title="">Partial Loss</a></li>
+  		         </ul> <!-- End Submenu -->      
+               </li>
+	           </ul>--%>
+          </nav>
+         </div> 
+      </div> 
+        </div>
+        <!-- Titlebar
+================================================== -->
+<section id="titlebar">
+	<!-- Container -->
+	<div class="container">
+	
+		<div class="eight columns">
+			<h3 class="left">Generation Data Entry</h3>
+		</div>
+		
+		<div class="eight columns">
+			<nav id="breadcrumbs">
+				<ul>
+					<li>Download Template </li>
+                   
+						<li><a href="upload/Dly_entry_coal_Bhilai_captive.xlsx">Bhilai-Cap</a></li>
+                    	<li><a href="upload/Dly_entry_coal_Bhilai_Exp.xlsx">Bhilai-Exp</a></li>
+                    	<li><a href="upload/Dly_entry_coal_BRBCL.xlsx">BRBCL</a></li>
+                    	<li><a href="upload/Dly_entry_coal_Durgapur.xlsx">Durgapur</a></li>
+                    <li><a href="upload/Dly_entry_coal_Jhajjar.xlsx">Jhajjar</a></li>
+                    	<li><a href="upload/Dly_entry_coal_Rourkela.xlsx">Rourkela</a></li>
+                     <li><a href="upload/Dly_entry_coal_vallur.xlsx">Vallur</a></li>
+				</ul>
+			</nav>
+		</div>
+
+	</div>
+	<!-- Container / End -->
+</section>
+
+      
+</header>
+  <!-- Header End -->
+  <!-- Content -->
+    <div id="content">
+        <div class="container">
+            <div class="row">
+        <div class="span12">
+           <asp:UpdatePanel ID="upDataEntry" runat="server">
+                <Triggers>
+                   <%--   <asp:AsyncPostBackTrigger ControlID="txtDate" EventName="txtDate_TextChanged" /> --%>
+                      <asp:PostBackTrigger ControlID="btnPreview" />
+                     <asp:PostBackTrigger ControlID="btnCancelUpload" />
+                     <asp:PostBackTrigger ControlID="btnFinalSubmit" />
+                            <%-- <asp:AsyncPostBackTrigger ControlID="ddlResp" EventName="SelectedIndexChanged" />--%>
+                       <asp:AsyncPostBackTrigger ControlID="ddlProject" EventName="SelectedIndexChanged" />
+                <%--    <asp:AsyncPostBackTrigger ControlID="ddlUnit" EventName="SelectedIndexChanged" />--%>
+                                           </Triggers>
+            <ContentTemplate>
+                 <table class="mytb"><tr><td>
+                      <fieldset><legend><b>Step 1. Select :</b></legend>
+                  <table> <%--<tr><td>         Responsibility:</td><td><asp:DropDownList ID="ddlResp" runat="server" datatextfield="t" DataValueField="v"  AutoPostBack="True"  /></td></tr>  --%>
+                 <tr><td>     <asp:Label ID="lbProject" runat="server" Text="Project:" Visible="false"  /></td><td>  <asp:DropDownList ID="ddlProject" runat="server" Visible="false" datatextfield="t" DataValueField="v"  AutoPostBack="True"  /></td><td>&nbsp;&nbsp;<asp:HiddenField ID="hfAdmin" runat="server" Value="0" /> </td><td>     <asp:Label ID="lbDate" runat="server" Text="Date:" Visible="false"  /></td><td>       <asp:TextBox ID="txtDate" runat="server" Visible="false" AutoPostBack="True"  ></asp:TextBox>
+                      <asp:CalendarExtender ID="CalendarExtender1" runat="server" Format="dd.MM.yyyy" OnClientDateSelectionChanged="checkDate" TargetControlID="txtDate"  />
+                <%--   &nbsp;&nbsp;&nbsp;<asp:Button ID="btnGo" runat="server" Text="Go" Visible="false"  />--%>
+                                                                                                       </td></tr>  
+               <%-- <tr><td>     <asp:Label ID="lbUnit" runat="server" Text="Unit:" Visible="false"  /></td><td>   <asp:DropDownList ID="ddlUnit" runat="server" Visible="false" datatextfield="t" DataValueField="v"  AutoPostBack="True"  /></td></tr>  --%>
+               <tr></tr>  
+                 
+                 </table> 
+                  </fieldset>
+                  
+                  </td></tr></table>
+                    <div id="divMsg" runat="server" class="my-notify-info" />
+                 <fieldset><legend><b>Step 2. Bulk Upload</b></legend>
+                      </fieldset>
+                
+                   <asp:Panel ID="pnlEdit" runat="server" Visible="False" class="vinGredientLightblue"> 
+                             
+                               <asp:FileUpload ID="FileUpload1" runat="server" />
+                          
+                                &nbsp;&nbsp;&nbsp;<asp:Button ID="btnPreview" runat="server" Text="Upload & Preview" Visible="false"  />
+                                 <asp:Button ID="btnFinalSubmit" runat="server"  Text="Final Submit" visible ="False"/>   &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; <asp:Button ID="btnCancelUpload" runat="server"  Text="Cancel / Retry Upload" visible ="False"/><br />
+                        <div style=" width: 90%;    overflow-x: auto;  overflow-y: auto;  white-space: nowrap;">
+    <asp:GridView ID="gvPreview" runat="server" CssClass="mytable" >
+    </asp:GridView></div>
+   
+                   
+                              </asp:Panel>
+                  <fieldset><legend><b>Step 3. Selective Edit</b></legend>
+                      </fieldset>
+              
+                          <asp:Panel ID="pnlDataGrid" runat="server" Visible="True" class="vinGredientLightblue"> 
+           <asp:GridView ID="gvKPA" runat="server"  HeaderStyle-CssClass="gvHeader"
+  CssClass="gvRow"
+  AlternatingRowStyle-CssClass="gvAltRow"
+  AutoGenerateColumns="false" >
+  <Columns>
+    <asp:TemplateField>
+      <HeaderTemplate>
+       <tr class="gvHeader">
+           <th></th>
+             <th>Parameter</th>
+             <th>Unit</th>
+             <th>UoM </th>
+             <th>Qty</th>
+             <th>Cost Center</th>
+            <th>SKF</th>
+             <th>Qty SKF</th>
+             <th>UoM SKF</th>
+            <th>!</th>
+        </tr>
+      </HeaderTemplate> 
+      <ItemTemplate>
+         <td><%# Eval("Parameters")%></td>
+           <td><%# Eval("unit_no")%></td>
+      <td><%# Eval("uom")%></td>
+          <td><%# Eval("p_value")%></td>
+          <td><%# Eval("m_tcode")%></td>
+           <td><%# Eval("skf_code")%></td>
+          <td><%# Eval("p_value")%></td>
+          <td><%# Eval("uom")%></td>
+          <td style="width:40px"><asp:Button ID="btnEdit" runat="server" Text="Edit"  CommandArgument='<%# Eval("id")%>'   /></td>
+       <%--Visible='<%#IIf(Session("eid") = "9383", "True", "False")%>' --%>
+      </ItemTemplate>
+    </asp:TemplateField>
+  </Columns>
+
+                          </asp:GridView>
+                              </asp:Panel>
+                       
+              
+   <asp:Panel ID="pnlSelectiveEdit" runat="server" Visible="False" style="border:4px solid #2eb9ce; -webkit-box-shadow: 10px 10px 5px 0px rgba(0,0,0,0.75);
+-moz-box-shadow: 10px 10px 5px 0px rgba(0,0,0,0.75);
+box-shadow: 10px 10px 5px 0px rgba(0,0,0,0.75);"> 
+                   <asp:Label ID="lblKindex" runat="server" Text=""></asp:Label>    <br />
+                
+   <asp:Label ID="lblEditDetail" runat="server"  />  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;   <asp:TextBox ID="txtAct" runat="server"  Width="70px" ></asp:TextBox>
+       &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+      <asp:Button ID="btnSave" runat="server" Text="Update" />   &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;       <asp:Button ID="btnBack" runat="server" Text="Cancel"  Enabled="True"  /> <br />
+                          <div id="divErr" runat="server"/>
+              
+   </asp:Panel>
+               
+                   </ContentTemplate>
+               
+               </asp:UpdatePanel>
+            </div>
+            </div>
+        </div>
+    </div>
+  <!-- Content End -->
+  
+  <!-- Footer -->
+  <footer id="footer">
+    <div class="container">
+      <div class="row">
+     
+      </div>
+      
+      <div class="row space50"></div>
+      <div class="row">
+        <div class="span7">
+          <div class="logo-footer">
+            <div id="divPage" runat="server" style="width:100%"></div>
+          </div>                       
+        </div>
+        <div class="span4 right">
+          &copy; 2017 NTPC Limited. All rights reserved. Online: <% Application("OnlineUsers").ToString %>
+          
+        </div>
+      </div>
+
+    </div>
+  </footer>
+  <!-- Footer End -->
+
+  
+    </form>
+    <!-- JavaScripts -->
+  <script type="text/javascript" src="js/jquery-1.8.3.min.js"></script> 
+  <script type="text/javascript" src="js/bootstrap.min.js"></script>  
+  <script type="text/javascript" src="js/functions.js"></script>
+  <script type="text/javascript" defer src="js/jquery.flexslider.js"></script>
+    <script type="text/javascript">
+        function checkDate(sender, args) {
+            //  alert('hi');
+            //get value
+            var isadmin = document.getElementById('hfAdmin').value;
+          //  isadmin = 1;
+            //set value
+           // document.getElementById('myHiddenField').value = 200;
+            var today = new Date();
+          //  var lastmonth = new Date(today.getFullYear(), today.getMonth(), today.getDate() - 30);
+            var lastmonth = new Date(getCurrentFiscalYear(), 3, 31);
+            //var d = new Date(getCurrentFiscalYear(), 4, 1, 0, 0, 0, 0);
+            //alert(d);
+            //return false;
+            var yesterday = new Date(today.getFullYear(), today.getMonth(), today.getDate() - 1);
+            yesterday.setHours(yesterday.getHours() + 23);
+            if (  sender._selectedDate > yesterday) {
+
+                alert("You cant select future date: Restriction at " +  formatDate(yesterday));
+                sender._selectedDate = yesterday;
+                // set the date back to the current date
+                sender._textbox.set_Value(sender._selectedDate.format(sender._format))
+            }
+
+            if (isadmin == 1) {
+                return true;
+            }
+            return true;
+            if (sender._selectedDate < lastmonth) {
+
+                alert("You cant select date beyond a month: " + formatDate(lastmonth1));
+                sender._selectedDate = lastmonth;
+                // set the date back to the current date
+                sender._textbox.set_Value(sender._selectedDate.format(sender._format))
+            }
+           
+        }
+        function getCurrentFiscalYear() {
+            //get current date
+            var today = new Date();
+
+            //get current month
+            var curMonth = today.getMonth();
+
+            var fiscalYr = today.getYear();
+            if (curMonth > 3) { //
+                var nextYr1 = (today.getFullYear() + 1).toString();
+                fiscalYr = today.getFullYear();
+            } else {
+                var nextYr2 = today.getFullYear().toString();
+                fiscalYr = (today.getFullYear() - 1);
+            }
+
+           return fiscalYr;
+        }
+        function formatDate(date) {
+            var d = new Date(date),
+                month = '' + (d.getMonth() + 1),
+                day = '' + d.getDate(),
+                year = d.getFullYear();
+
+            if (month.length < 2) month = '0' + month;
+            if (day.length < 2) day = '0' + day;
+
+            return [day, month, year].join('.');
+        }
+    </script>
+</body>
+</html>

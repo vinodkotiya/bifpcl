@@ -1,0 +1,74 @@
+﻿
+Imports SAP.Middleware.Connector
+
+Public Class ECCDestinationConfig
+    Implements IDestinationConfiguration
+
+    Public Event ConfigurationChanged(ByVal destinationName As String, ByVal args As RfcConfigurationEventArgs) Implements IDestinationConfiguration.ConfigurationChanged
+
+    Public Function GetParameters(ByVal destinationName As String) As RfcConfigParameters Implements IDestinationConfiguration.GetParameters
+
+        Dim parms As New RfcConfigParameters
+
+        Select Case destinationName
+
+            Case "DEV"
+                'Dim d As New dbOps
+                'Dim login() = d.getDBSingleArray("select data from SAPLogin where server='" & destinationName & "' order by seq")
+                'parms.Add(RfcConfigParameters.AppServerHost, login(0))
+                'parms.Add(RfcConfigParameters.SystemNumber, login(1))
+                'parms.Add(RfcConfigParameters.SystemID, login(2))
+                'parms.Add(RfcConfigParameters.User, login(3))
+                'parms.Add(RfcConfigParameters.Password, Strings.StrReverse(login(4)))  'save password in reverse order in database
+                'parms.Add(RfcConfigParameters.Client, login(5))
+                'parms.Add(RfcConfigParameters.Language, login(6))
+                'parms.Add(RfcConfigParameters.PoolSize, login(7))
+                'parms.Add(RfcConfigParameters.PeakConnectionsLimit, login(8))
+                'parms.Add(RfcConfigParameters.IdleTimeout, login(9))
+                parms.Add(RfcConfigParameters.AppServerHost, "10.0.0.47")
+                parms.Add(RfcConfigParameters.SystemNumber, "00")
+                parms.Add(RfcConfigParameters.SystemID, "ED1")
+                parms.Add(RfcConfigParameters.User, "005768")
+                parms.Add(RfcConfigParameters.Password, "aj1234")
+                parms.Add(RfcConfigParameters.Client, "100")
+                parms.Add(RfcConfigParameters.Language, "EN")
+                parms.Add(RfcConfigParameters.PoolSize, "5")
+                parms.Add(RfcConfigParameters.PeakConnectionsLimit, "10")
+                parms.Add(RfcConfigParameters.IdleTimeout, "600")
+
+            Case "PROD"
+                'Dim d As New dbOps
+                'Dim login() = d.getDBSingleArray("select data from SAPLogin where server='" & destinationName & "' order by seq")
+                'parms.Add(RfcConfigParameters.AppServerHost, login(0))
+                'parms.Add(RfcConfigParameters.SystemNumber, login(1))
+                'parms.Add(RfcConfigParameters.SystemID, login(2))
+                'parms.Add(RfcConfigParameters.User, login(3))
+                'parms.Add(RfcConfigParameters.Password, Strings.StrReverse(login(4)))  'save password in reverse order in database
+                'parms.Add(RfcConfigParameters.Client, login(5))
+                'parms.Add(RfcConfigParameters.Language, login(6))
+                'parms.Add(RfcConfigParameters.PoolSize, login(7))
+                'parms.Add(RfcConfigParameters.PeakConnectionsLimit, login(8))
+                'parms.Add(RfcConfigParameters.IdleTimeout, login(9))
+                parms.Add(RfcConfigParameters.MessageServerHost, "ciRP1.ntpclakshya.co.in")
+                parms.Add(RfcConfigParameters.LogonGroup, "PUBLIC")
+                parms.Add(RfcConfigParameters.MessageServerService, "3600")
+                parms.Add(RfcConfigParameters.SystemID, "RP1")
+                parms.Add(RfcConfigParameters.User, HttpContext.Current.Session("sapid"))
+                parms.Add(RfcConfigParameters.Password, HttpContext.Current.Session("sappwd"))
+                parms.Add(RfcConfigParameters.Client, "500")
+                parms.Add(RfcConfigParameters.Language, "EN")
+                parms.Add(RfcConfigParameters.PoolSize, "5")
+                parms.Add(RfcConfigParameters.PeakConnectionsLimit, "10")
+                parms.Add(RfcConfigParameters.IdleTimeout, "600")
+        End Select
+
+        Return parms
+
+    End Function
+
+    Public Function ChangeEventsSupported() As Boolean Implements IDestinationConfiguration.ChangeEventsSupported
+        Return False
+    End Function
+
+
+End Class

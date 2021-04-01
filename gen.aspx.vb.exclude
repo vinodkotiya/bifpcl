@@ -1,0 +1,361 @@
+﻿Imports dbOp
+Imports Common
+Imports System.Data
+Imports AjaxControlToolkit
+
+Partial Class _gen
+    Inherits System.Web.UI.Page
+    'Private _ecc As RfcDestination
+    Public log As String = ""
+    Private starttime As Integer
+    Private endTime As Integer
+    Private pageLoadTime As Integer
+    Protected Sub Page_Init(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.Init
+        starttime = Environment.TickCount
+    End Sub
+    Protected Sub Page_PreRender(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.PreRender
+        endTime = Environment.TickCount
+        pageLoadTime = endTime - starttime
+        divPage.InnerHtml = getCC(pageLoadTime, Session("eid"))
+    End Sub
+
+    Private Sub _Default_Load(sender As Object, e As EventArgs) Handles Me.Load
+        Try
+            '  Session("eid") = "1506"
+            If Session("eid") Is Nothing Then
+
+                Response.Redirect("login.aspx?redirectafterlogin=gen.aspx")
+            End If
+            If Not Page.IsPostBack Then
+                If Cache("menu3") Is Nothing Then
+                    Cache.Insert("menu3", makeappmenu(3), Nothing, DateTime.Now.AddHours(12.0), TimeSpan.Zero)
+                End If
+                nav.InnerHtml = Cache("menu3").ToString
+
+                load_user_pref()
+                ' If isAdmin(Session("eid")) Then hfAdmin.Value = 1
+
+                executeDB("update hits set view = view+1 where page = 'gen'")
+                executeDB("insert into login (eid, log, logintime) values (" & Session("eid") & " , 'gen.aspx Page Access : at " & Now.ToString() & " - " & Request.UserHostAddress & "', current_timestamp)", "logdb")
+            End If
+        Catch e1 As Exception
+            Response.Write("<div id='bottomline'>" & e1.Message & "</div>")
+        End Try
+    End Sub
+
+
+
+    Private Sub ddlProject_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ddlProject.SelectedIndexChanged
+        Dim q = ""
+        Try
+            'q = "select m_unit || ' ' || m_Comm_stage as t, m_tcode as v from m_costcenter where m_Comm_stage <> 'STATION' and m_stn = " & ddlProject.SelectedValue
+            'ddlUnit.DataSource = getDBTable(q)
+            'ddlUnit.DataBind()
+            'ddlUnit.Items.Add(New ListItem("Select", "select"))
+            'ddlUnit.SelectedValue = "select"
+            'ddlUnit.Visible = True
+            'txtDate.Visible = False
+            '' lbUnit.Visible = True
+            'lbDate.Visible = False
+            txtDate.Visible = True
+            txtDate.Text = ""
+            lbDate.Visible = True
+            showForEdit("")
+            If getAuthLevel(Session("eid"), ddlProject.SelectedValue) = 3 Then : hfAdmin.Value = 1
+            Else hfAdmin.Value = 0
+                End If
+        Catch ex As Exception
+            divMsg.InnerHtml = ex.Message & " error in ddlproject " '& q
+        End Try
+
+    End Sub
+
+    'Private Sub ddlUnit_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ddlUnit.SelectedIndexChanged
+    '    txtDate.Visible = True
+    '    lbDate.Visible = True
+    '    pnlEdit.Visible = True
+    '    btnPreview.Visible = True
+    '    Dim pref = ddlProject.SelectedValue & "#" & ddlUnit.SelectedValue '& "#" & txtDate.Text
+    '    Dim q = " replace into user_pref (eid,pref,module) values  (" & Session("eid") & ",'" & pref & "', 'gen') "
+    '    divMsg.InnerHtml = "User Preference Saved: " & executeDB(q)
+    '    ' = q
+    'End Sub
+
+    'Private Sub btnGo_Click(sender As Object, e As EventArgs) Handles btnGo.Click
+    '    ddlParam.DataSource = getDBTable("select param as t, param as v from m_param where 1")
+    '    ddlParam.DataBind()
+    '    ddlParam.Items.Add(New ListItem("Select Parameter", "select"))
+    '    ddlParam.SelectedValue = "select"
+
+
+    'End Sub
+    Sub load_user_pref()
+        Dim pref = ""
+        Dim q = ""
+        Try
+            pref = getDBsingle("select pref from user_pref where module ='gen' and eid = " & Session("eid"))
+            Dim projallow = "select plant from m_users where eid = " & Session("eid") & " "
+
+            'If getAuthLevel(Session("eid")) Then
+            '    q = " select distinct Plant_Description as t, Plant_Code as v from m_plant order by Plant_Description"
+
+            'Else
+
+
+            q = "  select distinct Plant_Description as t, Plant_Code as v from m_plant  where Plant_Code in (" & projallow & ") order by Plant_Description"
+            ' End If
+            ddlProject.DataSource = getDBTable(q)
+            ddlProject.DataBind()
+            ddlProject.Items.Add(New ListItem("Select", "select"))
+            ddlProject.SelectedValue = "select"
+            ddlProject.Visible = True
+            ' ddlUnit.Visible = False
+            txtDate.Visible = False
+            lbProject.Visible = True
+            ' lbUnit.Visible = False
+            lbDate.Visible = False
+            If Not pref.Contains("Error") And pref.Contains("#") Then
+                Dim p() = pref.Split("#")
+                ' ddlResp_SelectedIndexChanged(vbNull, EventArgs.Empty)
+                ddlProject.SelectedValue = p(0)
+                ddlProject_SelectedIndexChanged(vbNull, EventArgs.Empty)
+                ' ddlUnit.SelectedValue = p(1)
+                ' ddlUnit_SelectedIndexChanged(vbNull, EventArgs.Empty)
+                'ddlMonth.SelectedValue = p(2)
+                'ddlMonth_SelectedIndexChanged(vbNull, EventArgs.Empty)
+
+                divMsg.InnerHtml = "User Preference Loaded : " & getAuthLevelName(Session("eid"), ddlProject.SelectedValue)
+            End If
+        Catch ex As Exception
+            divMsg.InnerHtml = ex.Message & " error in user pref " & pref & q
+        End Try
+
+    End Sub
+
+    Private Sub btnPreview_Click(sender As Object, e As EventArgs) Handles btnPreview.Click
+        If Session("eid") Is Nothing Then
+            Response.Redirect("admin.aspx")
+            Exit Sub
+        End If
+        If String.IsNullOrEmpty(txtDate.Text) Then
+            divMsg.InnerHtml = "Please enter the date"
+            Exit Sub
+        End If
+        If FileUpload1.HasFile Then
+
+            If System.IO.Path.GetExtension(FileUpload1.FileName).Contains(".xlsx") Or System.IO.Path.GetExtension(FileUpload1.FileName).Contains(".XLSX") Then
+                Try
+                    If FileUpload1.FileContent.Length <= 0 Then
+                        divMsg.InnerHtml = "File is empty"
+                        Exit Sub
+                    Else
+                        divMsg.InnerHtml = "File has bytes: " & FileUpload1.FileContent.Length
+                        '  Exit Sub
+                    End If
+                    '
+                    Dim package As OfficeOpenXml.ExcelPackage = New OfficeOpenXml.ExcelPackage(FileUpload1.FileContent)
+                    ' Dim inputContent As String
+                    'Using inputStreamReader As New System.IO.StreamReader(FileUpload1.FileContent)
+                    '    inputContent = inputStreamReader.ReadToEnd()
+                    'End Using
+                    'divMsg.InnerHtml = divMsg.InnerHtml & " p = " & package.Stream.Length
+                    'Exit Sub
+                    Dim cols() As String = {"2", "3", "4", "5", "6", "7", "8", "9", "10"}
+                    Dim mydt = ToDataTable(package, 8).DefaultView.ToTable(True, cols)
+                    ViewState("mydt") = mydt
+
+
+
+                    gvPreview.Visible = True
+                    gvPreview.Caption = "This is preview. Check it & if everything is fine then Click on Submit to Save the Data"
+                    gvPreview.DataSource = ViewState("mydt")
+                    gvPreview.DataBind()
+                    '  divMsg.InnerHtml = mydt.Columns(0).ToString
+                    btnPreview.Visible = False
+                    FileUpload1.Visible = False
+                    btnFinalSubmit.Visible = True
+                    btnCancelUpload.Visible = True
+                    pnlDataGrid.Visible = False
+                Catch ex As Exception
+                    divMsg.InnerHtml = "Error in xls to table conversion " & ex.Message
+                End Try
+
+            Else
+                divMsg.InnerHtml = "Attach Excel File .xlsx & not older .xls"
+            End If
+        Else
+            divMsg.InnerHtml = "Attach Excel File .xlsx & not older .xls"
+        End If
+    End Sub
+
+
+    Private Sub btnFinalSubmit_Click(sender As Object, e As EventArgs) Handles btnFinalSubmit.Click
+        Try
+            Dim msg = ""
+            Dim mydt As DataTable = ViewState("mydt")
+            '' p_date, m_tcode, spf_code is primary key , skip if qty is zero
+            Dim q = "replace into t_generation (uid, p_date, m_tcode,skf_code, uom , p_value,eid, last_updated, lastupdateby, del) values "
+            Dim dt = DateTime.ParseExact(txtDate.Text, "dd.M.yyyy", Nothing)
+            Dim i = 1
+            Dim skiped = ""
+            Dim updated = ""
+            For Each r In mydt.Rows
+
+                If i = 1 Or String.IsNullOrEmpty(r(4)) Then  '' skip first row column name, or qty is blank or zero
+                    i = i + 1
+                    skiped = skiped & "," & i
+                    Continue For
+                End If
+                ''qty has some velue
+                Dim qty = 0.0
+                Double.TryParse(r(4), qty)
+                If qty = 0 Then  '' skip  qty is  zero
+                    i = i + 1
+                    skiped = skiped & "," & i
+                    Continue For
+                End If
+                ''' check if First Four digit of Cost Centre should be same as that of plant code else the transaction
+                ' will Not be uploaded.
+                If String.IsNullOrEmpty(r(5)) Or Not r(5).ToString.StartsWith(ddlProject.SelectedValue) Then  '
+                    '  txtDate.Text = ""
+                    divMsg.InnerHtml = "Error: Quitting because 1st 4 digit of cost center " & r(5) & " do not match with project selected " & ddlProject.SelectedValue & ". Upload Failed. Retry after correcting row number " & i
+                    Exit Sub
+                End If
+                ''' check ifThe date should be same as that selected on upload screen. else the transaction
+                ' will Not be uploaded.
+                If Not r(0).ToString.Trim = txtDate.Text Then
+                    '  txtDate.Text = ""
+                    divMsg.InnerHtml = "Error: Quitting because Date in excel sheet " & r(0).ToString.Trim & " do not match with date selected " & txtDate.Text & ". Upload Failed. Retry after correcting row number " & i
+                    Exit Sub
+                End If
+                q = q & " (" & i & ",'" & dt.ToString("yyyy-MM-dd") & "','" & r(5).ToString.Replace(",", "").Replace("'", "") & "','" & r(6).ToString.Replace(",", "").Replace("'", "") & "','" & r(3).ToString.Replace(",", "").Replace("'", "") & "', '" & qty.ToString.Replace(",", "").Replace("'", "") & " ','" & Session("eid") & "', current_timestamp, '" & Session("eid") & Request.UserHostAddress & "', 0), "
+
+                'If i < mydt.Rows.Count Then : q = q & ", "
+                'Else : q = q & "; "
+                'End If
+                i = i + 1
+                updated = updated & "," & i
+            Next
+
+            ''to tackle last comma insert dummy row with del = 1
+            q = q & "(28,'1999-01-01','2044','OP064','MT', '0','0', current_timestamp, 'dummy', 1);"
+
+            Dim ret = executeDB(q)
+            If ret.Contains("Error") Then
+                divMsg.InnerHtml = " Unable to upload data" & q & ret & vbCrLf
+                Exit Sub
+            End If
+
+            msg = i & " records have been uploaded succesfully <br/>Blank Rows number skipped: " & skiped & " <br/> Rows updated: " & updated & " " '& q
+            btnFinalSubmit.Visible = False
+            btnCancelUpload.Visible = False
+            gvPreview.Visible = False
+            showForEdit(msg & "<br/>")
+        Catch ex As Exception
+            divMsg.InnerHtml = "Final submit " & ex.Message
+        End Try
+    End Sub
+
+    Protected Sub txtDate_TextChanged(sender As Object, e As EventArgs) Handles txtDate.TextChanged
+        pnlEdit.Visible = True
+        btnPreview.Visible = True
+        showForEdit("")
+    End Sub
+    Sub showForEdit(ByVal msg As String)
+        Try
+            If String.IsNullOrEmpty(txtDate.Text) Then
+                divMsg.InnerHtml = "Please enter the date"
+                Exit Sub
+            End If
+            btnFinalSubmit.Visible = False
+            btnCancelUpload.Visible = False
+            gvPreview.Visible = False
+            pnlEdit.Visible = True
+            btnPreview.Visible = True
+            FileUpload1.Visible = True
+            pnlSelectiveEdit.Visible = False
+            divMsg.InnerHtml = "Loading data for " & txtDate.Text
+            Dim dt = DateTime.ParseExact(txtDate.Text, "dd.M.yyyy", Nothing)
+            Dim q = "select count(p_value) from    t_generation where del = 0 and  p_date = '" & dt.ToString("yyyy-MM-dd") & "' and m_tcode like '" & ddlProject.SelectedValue & "%' limit 1"
+            Dim ret = getDBsingle(q)
+            If ret.Contains("Error") Then ret = 0
+            Dim str = "For: " & txtDate.Text & " Rows uploaded:" & ret
+            'q = "select g.m_tcode || '#' || skf_code as id, Parameters,cast(u.unit_no as text) as unit_no, g.m_tcode,skf_code,uom, p_value from t_generation g, m_param p, m_unit u where g.del = 0 and p.t_code = g.m_tcode and p.SKF = g.skf_code and u.m_tcode = g.m_tcode and g.p_date = '" & dt.ToString("yyyy-MM-dd") & "' and g.m_tcode like '" & ddlProject.SelectedValue & "%'"
+            q = "select g.m_tcode || '#' || skf_code as id, Parameters,cast(u.unit_no as text) as unit_no, g.m_tcode,skf_code,uom, p_value from t_generation g, m_skf p, m_costcenter u where g.del = 0  and p.skf = g.skf_code and u.m_tcode = g.m_tcode and g.p_date = '" & dt.ToString("yyyy-MM-dd") & "' and g.m_tcode like '" & ddlProject.SelectedValue & "%'"
+            Dim mydt = getDBTable(q)
+
+            str = str & " . Rows available for edit: " & mydt.Rows.Count & " (if mismath then tcode does not exist in costcenter or skf master)"
+            divMsg.InnerHtml = msg & "Loading data " & str ' & q
+            gvKPA.DataSource = mydt
+            gvKPA.DataBind()
+            pnlDataGrid.Visible = True
+        Catch ex As Exception
+            divMsg.InnerHtml = "Error in Show/Edit" & ex.Message
+        End Try
+    End Sub
+
+    Private Sub gvKPA_RowCommand(sender As Object, e As GridViewCommandEventArgs) Handles gvKPA.RowCommand
+        Dim value = e.CommandArgument.ToString()
+        Dim q = ""
+        Try
+            If Not value.ToString.Contains("#") Then
+                divMsg.InnerHtml = "Row didn't identified:" & value
+                Exit Sub
+            End If
+            Dim cols() = value.Split("#")
+            q = "select Parameters from m_param where t_code = " & cols(0) & " and skf = '" & cols(1) & "' limit 1"
+            Dim detail = getDBsingle(q)
+
+            Dim dt = DateTime.ParseExact(txtDate.Text, "dd.M.yyyy", Nothing)
+            q = "select p_value from t_generation where m_tcode ='" & cols(0) & "' and skf_code ='" & cols(1) & "' and  p_date = '" & dt.ToString("yyyy-MM-dd") & "' limit 1"
+            lblKindex.Text = value
+            pnlSelectiveEdit.Visible = True
+            pnlDataGrid.Visible = False
+            lblEditDetail.Text = detail
+            txtAct.Text = getDBsingle(q)
+
+        Catch ex As Exception
+            divMsg.InnerHtml = "Error in row command:" & ex.Message & q
+        End Try
+
+    End Sub
+
+    Private Sub btnSave_Click(sender As Object, e As EventArgs) Handles btnSave.Click
+
+        If Not lblKindex.Text.Contains("#") Then
+            divMsg.InnerHtml = "Row didn't identified:" & lblKindex.Text
+            Exit Sub
+        End If
+        If String.IsNullOrEmpty(txtAct.Text) Then
+            divMsg.InnerHtml = "Enter something to save"
+            Exit Sub
+        End If
+        Dim act As Double
+        Dim l1b = Double.TryParse(txtAct.Text.Replace("%", ""), act)
+        If Not l1b Then
+            divMsg.InnerHtml = "Enter value in decimal"
+            Exit Sub
+        End If
+        Dim cols() = lblKindex.Text.Split("#")
+        Dim dt = DateTime.ParseExact(txtDate.Text, "dd.M.yyyy", Nothing)
+        Dim q = "update t_generation set p_value = '" & act.ToString & "'  where del = 0 and m_tcode ='" & cols(0) & "' and skf_code ='" & cols(1) & "' and  p_date = '" & dt.ToString("yyyy-MM-dd") & "' "
+        Dim ret = executeDB(q)
+        If ret = "ok" Then
+            divMsg.InnerHtml = "Data updated succesfully"
+            pnlSelectiveEdit.Visible = False
+            showForEdit(" Back ")
+        Else
+            divMsg.InnerHtml = "Fail to update" & q
+        End If
+    End Sub
+
+    Private Sub btnBack_Click(sender As Object, e As EventArgs) Handles btnBack.Click
+
+        showForEdit(" Back ")
+    End Sub
+
+    Private Sub btnCancelUpload_Click(sender As Object, e As EventArgs) Handles btnCancelUpload.Click
+
+        showForEdit("Upload Cancel<br/>")
+    End Sub
+End Class

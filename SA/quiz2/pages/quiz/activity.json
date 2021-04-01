@@ -1,0 +1,164 @@
+{
+  "quizlist": [
+    {
+      "q": "About What percentage of the total net electricity generated in Bangladesh each day is represented by coal?",
+      "a": "15 percent",
+      "b": "40 percent",
+      "c": "11 percent",
+      "d": "3 percent",
+      "ans": "D"
+    },
+    {
+      "q": "The hardest type of coal, consisting of nearly pure carbon, is:",
+      "a": "lignite",
+      "b": "bituminous",
+      "c": "anthracite",
+      "d": "sub-bituminous",
+      "ans": "C"
+    },
+    {
+      "q": "Energy fuels, such as coal, crude oil and natural gas, formed from the fossil remains of organic materials, are called:",
+      "a": "renewable fuels",
+      "b": "carbonaceous fuels",
+      "c": "sedimentary fuels",
+      "d": "fossil fuels",
+      "ans": "D"
+    },
+    {
+      "q": "About how much coal is needed to supply enough electricity to light ten 100-watt bulbs for about an hour?",
+      "a": "400 gram",
+      "b": "1.2 Kg",
+      "c": "11 Kg",
+      "d": "200 gram",
+      "ans": "A"
+    },
+    {
+      "q": "Where is in Bangladesh only Coal fired power station situated?",
+      "a": "Rampal",
+      "b": "Barapukuria",
+      "c": "Materbari",
+      "d": "Kaptai",
+      "ans": "B"
+    },
+    {
+      "q": "In our country, the most widely used energy resource is",
+      "a": "Coal",
+      "b": "Oil",
+      "c": "Natural gas",
+      "d": "hydro",
+      "ans": "C"
+    },
+    {
+      "q": "Which of the following are renewable forms of energy?",
+      "a": "Solar",
+      "b": "Nuclear",
+      "c": "Fossil fuel",
+      "d": "All of them",
+      "ans": "A"
+    },
+    {
+      "q": "Where Rampal power plant is being set up?",
+      "a": "Inside Sundarbans",
+      "b": "Adjacent to Sundarbans",
+      "c": "Adjacent to World Heritage Site",
+      "d": "14 KM away from outer boundary of Sundarbans.",
+      "ans": "D"
+    },
+    {
+      "q": "Who will use the electricity produced by Rampal power Plant?",
+      "a": "India & Bangladesh 50:50",
+      "b": "Only Bangladesh",
+      "c": "Bangladesh & India 75:25",
+      "d": "Only India",
+      "ans": "B"
+    },
+    {
+      "q": "Who is Owner�s Engineer for Rampal Power Plant",
+      "a": "NTPC of India",
+      "b": "Bangladesh Power Dev. Board",
+      "c": "Fichtner of Germany",
+      "d": "None of above",
+      "ans": "C"
+    },
+    {
+      "q": "What are measure taken against air pollution at Rampal Power Plant",
+      "a": "Low nox burner",
+      "b": "Electro static precipitator",
+      "c": "Flue gas Desulphurization",
+      "d": "All of the above",
+      "ans": "D"
+    },
+    {
+      "q": "What is the use of Electro static precipitator",
+      "a": "Removal of dust particle from flue gas",
+      "b": "Removal of Sox from flue gas",
+      "c": "Removal of Nox particle from flue gas",
+      "d": "All of the above",
+      "ans": "A"
+    },
+    {
+      "q": "What is the use of Flue gas Desulphurization Unit",
+      "a": "Removal of dust particle from flue gas",
+      "b": "Removal of Sox from flue gas",
+      "c": "Removal of Nox particle from flue gas",
+      "d": "All of the above",
+      "ans": "B"
+    },
+    {
+      "q": "What is the use of Low nox burner",
+      "a": "Removal of dust particle from flue gas",
+      "b": "Removal of Sox from flue gas",
+      "c": "Reduce the Nox production in Boiler",
+      "d": "All of the above",
+      "ans": "C"
+    },
+    {
+      "q": "What are measure taken against water pollution at Rampal Power Plant",
+      "a": "Effluent treatment plant",
+      "b": "Sewage treatment Plant",
+      "c": "Oil seperator",
+      "d": "All of the above",
+      "ans": "D"
+    },
+    {
+      "q": "What is the source of water for Rampla Project",
+      "a": "Ground water",
+      "b": "Water from Ichamati River",
+      "c": "Water from Passur River",
+      "d": "Water from Moidhara River",
+      "ans": "C"
+    },
+    {
+      "q": "What is the height of Chimney?",
+      "a": "275 M",
+      "b": "300 M",
+      "c": "150 M",
+      "d": "175M",
+      "ans": "A"
+    },
+    {
+      "q": "Who is doing Environment Monitoring?",
+      "a": "NTPC",
+      "b": "BPDB",
+      "c": "FICHTNER",
+      "d": "Independent Agency",
+      "ans": "D"
+    },
+    {
+      "q": "How Coal will be transported?",
+      "a": "Covered Vessel",
+      "b": "Open cargo",
+      "c": "Open barge",
+      "d": "By truck",
+      "ans": "A"
+    },
+    {
+      "q": "Where from Coal will be procured?",
+      "a": "India",
+      "b": "Bangladesh",
+      "c": "China",
+      "d": "Indonesia/Australia/South Africa",
+      "ans": "D"
+    }
+  ]
+}
