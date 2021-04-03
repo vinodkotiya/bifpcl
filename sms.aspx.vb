@@ -22,7 +22,7 @@ Partial Class sms
         Dim myJson As String
         If request_type = "OTP" Then
             Dim json As String = serializer.Serialize(New With {Key .api_key = "KEY-bryoxd3oxg65i52weg9l0phljixic6w7",
-                                                  Key .api_secret = "en8MxcoDturzTYrX",
+                                                  Key .api_secret = "en8MxcoDturzTYrXdd",
                                                   Key .request_type = request_type,
                                                   Key .message_type = "UNICODE",
                                                   Key .message_body = message_body,
@@ -31,7 +31,7 @@ Partial Class sms
             myJson = json
         ElseIf request_type = "GENERAL_CAMPAIGN" Then
             Dim json As String = serializer.Serialize(New With {Key .api_key = "KEY-bryoxd3oxg65i52weg9l0phljixic6w7",
-                                                 Key .api_secret = "en8MxcoDturzTYrX",
+                                                 Key .api_secret = "en8MxcoDturzTYrXdd",
                                                  Key .request_type = request_type,
                                                  Key .message_type = "UNICODE",
                                                  Key .message_body = message_body,
@@ -44,7 +44,7 @@ Partial Class sms
 
         Using client = New HttpClient()
             Using response As HttpResponseMessage = Await client.PostAsync("https://portal.adnsms.com/api/v1/secure/send-sms", New StringContent(myJson, Encoding.UTF8, "application/json"))
-                '  Using response As HttpResponseMessage = Await client.PostAsync("https://portal.adnsms.com/api/v1/secure/check-balance", New StringContent(json, Encoding.UTF8, "application/json"))
+                '  Using response As HttpResponseMessage = Await client.PostAsync("https://portal.addnsms.com/api/v1/secure/check-balance", New StringContent(json, Encoding.UTF8, "application/json"))
                 Using content As HttpContent = response.Content
                     ' Get contents of page as a String.
                     Dim result As String = Await content.ReadAsStringAsync()
