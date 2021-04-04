@@ -5,7 +5,7 @@
 
 ### Screenshot
 
-![CoolAdmin admin dashboard template preview](https://colorlib.com/wp/wp-content/uploads/sites/2/Dashboard-v2.jpg)
+![CoolAdmin admin dashboard template preview](https://www.bifpcl.com/Untitled.png)
 
 ### Demo Site: [Sooon]
 
